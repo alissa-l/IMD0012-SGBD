@@ -1,20 +1,21 @@
-CC=gcc
+COMPILER=gcc
 CFLAGS=-I.
-DEPS = $(wildcard *.h)
-SRC = $(wildcard *.c)
+HEADER_CODE = $(wildcard *.h)
+SOURCE_CODE = $(wildcard *.c)
 OBJDIR = obj
 BINDIR = bin
-OBJ = $(patsubst %.c,$(OBJDIR)/%.o,$(SRC))
+OBJECT_FILE = $(patsubst %.c,$(OBJDIR)/%.o,$(SOURCE_CODE))
+PROGRAM = sgbd
 
-all: $(BINDIR)/program
+all: $(BINDIR)/$(PROGRAM)
 
-$(OBJDIR)/%.o: %.c $(DEPS)
+$(OBJDIR)/%.o: %.c $(HEADER_CODE)
 	mkdir -p $(OBJDIR)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(COMPILER) -c -o $@ $< $(CFLAGS)
 
-$(BINDIR)/program: $(OBJ)
+$(BINDIR)/$(PROGRAM): $(OBJECT_FILE)
 	mkdir -p $(BINDIR)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(COMPILER) -o $@ $^ $(CFLAGS)
 
 clean:
-	rm -f $(OBJDIR)/*.o $(BINDIR)/program
+	rm -f $(OBJDIR)/*.o $(BINDIR)/$(PROGRAM)
