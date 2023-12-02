@@ -1,58 +1,84 @@
-#include <stdio.h>
 #include <errno.h>
+#include <stdio.h>
 #include <string.h>
-#include <coluna.h>
+#include "escrever_tabelas.h"
 
-FILE *arquivo;
+Coluna* criar_colunas(Coluna colunas[], int qtdColunas) {
+    for (int i = 0; i < qtdColunas; i++) {
+        printf("Digite o nome da coluna %d: ", i + 1);
+        scanf("%s", colunas[i].nome);
+
+        printf("Qual o tipo da coluna %d: \n", i + 1);
+        printf("1 - CHAR\t2 - INT\n3 - FLOAT\t4 - DOUBLE\n5 - STRING\n");
+
+        int opcao;
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+
+        case 1:
+            colunas[i].tipo = CHAR;
+            break;
+        case 2:
+            colunas[i].tipo = INT;
+            break;
+        case 3:
+            colunas[i].tipo = FLOAT;
+            break;
+        case 4:
+            colunas[i].tipo = DOUBLE;
+            break;
+        case 5:
+            colunas[i].tipo = STRING;
+            break;
+        }
+    }
+
+    return colunas;
+}
 
 void criar_tabela() {
 
-    //Criar o nome da tabela
+    // Criar o nome da tabela
     printf("Digite o nome da tabela: ");
 
     char nomeArquivo[20];
-    scanf("%s", &nomeArquivo);
+    scanf("%s", nomeArquivo);
 
-    strcat(nomeArquivo, ".pwn");
-
-    Coluna colunas[10];
-
+    // Criar a coluna primaria
     printf("Digite o nome da coluna primaria: ");
     char colunaId[20];
-    scanf("%s", &colunaId);
+    scanf("%s", colunaId);
 
+
+    // Quantas colunas
+    int qtdColunas;
+    printf("Quantas colunas deseja criar? ");
+    scanf("%d", qtdColunas);
+
+    // Array pra guardar as colunas
+    Coluna colunas[qtdColunas];
+
+    // Inicializar a coluna primaria
     strcpy(colunas[0].nome, colunaId);
+
+    // Obrigatoriamente a coluna 0 é um inteiro
     colunas[0].tipo = INT;
 
-    for (int i = 0; i < 10; i++)
-    {
-        printf("Digite o nome da coluna %d: ", i + 1);
-        scanf("%s", &colunas[i]);
+    Coluna* colunasPtr = criar_colunas(colunas, qtdColunas);
 
 
-        
-        printf("Qual o tipo da coluna %d: ", i + 1);
-        scanf("%d", &colunas[i].tipo);
-
+    // Imprimir nomes e tipos das colunas
+    printf("Nomes e tipos das colunas:\n");
+    for (int i = 0; i < 10; i++) {
+        if (colunas[i].nome[0] == '\0') {
+            break;
+        } else {
+            printf("Coluna %d: %s (Tipo: %d)\n", i + 1, colunas[i].nome,
+                   colunas[i].tipo);
+        }
     }
 
-    arquivo = fopen(nomeArquivo, "w");
+    escrever_tabela(colunasPtr, nomeArquivo);
 
-    if (arquivo != NULL)
-    {
-        printf("Arquivo criado com sucesso!\n");
-    }
-    else
-    {
-        printf("Erro ao abrir o arquivo!\n");
-        printf("Erro: %d\n", errno);
-        printf("Erro: %s\n", strerror(errno));
-    }
-
-
-    char nome[] = "Teste de escrita em arquivo";
-
-    fprintf(arquivo, "%s", nome);
-
-    fclose(arquivo);
 }
