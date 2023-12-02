@@ -1,2 +1,7 @@
 bin/
 obj/
+clang_format
+.clang-format
+.lang-format
+.vscode/
+```
