@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include "criar_tabela.h"
+#include "escrever_tabelas.h"
 
-int main()
-{
+int main() {
 
-    while (1)
-    {
+    while (1) {
         printf("Qual operação deseja realizar?\n");
         printf("1 - Criar tabela\t\t2 - Listar tabelas\n");
         printf("3 - Criar novo registro\t\t4 - Listar dados de uma tabela\n");
@@ -15,28 +14,27 @@ int main()
         int opcao;
         scanf("%d", &opcao);
 
-        switch (opcao)
-        {
+        switch (opcao) {
         case 1:
             criar_tabela();
             break;
         case 2:
-            listar_tabelas();
+            //listar_tabelas();
             break;
         case 3:
-            criar_registro();
+            //criar_registro();
             break;
         case 4:
-            listar_dados();
+            //listar_dados();
             break;
         case 5:
-            pesquisar_registro();
+            //pesquisar_registro();
             break;
         case 6:
-            apagar_registro();
+            //apagar_registro();
             break;
         case 7:
-            apagar_tabela();
+            //apagar_tabela();
             break;
         case 8:
             break;
