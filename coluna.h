@@ -1,8 +1,9 @@
 enum Tipo {
-    INT,
     CHAR,
+    INT,
     FLOAT,
-    DOUBLE
+    DOUBLE,
+    STRING
 };
 
 typedef struct coluna {
