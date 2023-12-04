@@ -3,14 +3,15 @@
 #include <string.h>
 #include <errno.h>
 
-void escrever_tabela(Coluna colunas[], char nomeArquivo[]) {
-
+void escrever_tabela(Coluna colunas[], int qtdColunas, char nomeArquivo[]) {
+    char listTipos[5][20] = {"CHAR", "INT", "FLOAT", "DOUBLE", "STRING"};
     FILE *arquivo;
-    char nomeDiretorio[40] = "bin/tabelas/";
+    char nomeDiretorio[200] = "tabelas/";
 
     strcat(nomeArquivo, ".pwn");
     strcat(nomeDiretorio, nomeArquivo);
 
+    printf("nomeDiretorio: %s\n", nomeDiretorio);
     arquivo = fopen(nomeDiretorio, "w");
 
     if (arquivo != NULL) {
@@ -21,9 +22,19 @@ void escrever_tabela(Coluna colunas[], char nomeArquivo[]) {
         printf("Erro: %s\n", strerror(errno));
     }
 
-    char nome[] = "Teste de escrita em arquivo";
+    char linha[200];
+    char valor[200];
+    for(int i = 0; i < qtdColunas; i++) {
+        strcat(valor, " ");
+        strcat(valor, colunas[i].nome);
+        strcat(valor, ".");
+        strcat(valor, listTipos[colunas[i].tipo]);
+        strcat(valor, ";");
+        strcat(linha, valor);
+        printf("%s\n", linha);
+    }
 
-    fprintf(arquivo, "%s", nome);
+    fprintf(arquivo, "%s", linha);
 
     fclose(arquivo);
 }
