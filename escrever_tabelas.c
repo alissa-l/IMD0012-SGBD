@@ -5,7 +5,12 @@
 
 void escrever_tabela(Coluna colunas[], int qtdColunas, char nomeArquivo[]) {
     char listTipos[5][20] = {"CHAR", "INT", "FLOAT", "DOUBLE", "STRING"};
-    FILE *arquivo;
+    
+    FILE *arquivo, *listTabela;
+    
+    listTabela = fopen("tabelas/listTabelas.pwn", "a");
+    fprintf(listTabela, "%i %s\n", qtdColunas, nomeArquivo);
+
     char nomeDiretorio[200] = "tabelas/";
 
     strcat(nomeArquivo, ".pwn");
@@ -22,19 +27,9 @@ void escrever_tabela(Coluna colunas[], int qtdColunas, char nomeArquivo[]) {
         printf("Erro: %s\n", strerror(errno));
     }
 
-    char linha[200];
-    char valor[200];
     for(int i = 0; i < qtdColunas; i++) {
-        strcat(valor, " ");
-        strcat(valor, colunas[i].nome);
-        strcat(valor, ".");
-        strcat(valor, listTipos[colunas[i].tipo]);
-        strcat(valor, ";");
-        strcat(linha, valor);
-        printf("%s\n", linha);
+        fprintf(arquivo, "%s.%s;", colunas[i].nome, listTipos[colunas[i].tipo]);
     }
-
-    fprintf(arquivo, "%s", linha);
 
     fclose(arquivo);
 }

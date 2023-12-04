@@ -74,7 +74,7 @@ void criar_tabela() {
         if (colunasPtr[i].nome[0] == '\0') {
             break;
         } else {
-            printf("Coluna %d: %s (Tipo: %i)\n", 
+            printf("Coluna %d: %s (Tipo: %s)\n", 
             i + 1, colunasPtr[i].nome, listTipos[colunasPtr[i].tipo]);
         }
     }
