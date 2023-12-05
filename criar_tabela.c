@@ -1,14 +1,138 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include "escrever_tabelas.h"
+#include "coluna.h"
+#include <dirent.h>
+#include <stdbool.h>
+#include <sys/stat.h>
+
+void erro_ao_abrir_arquivo() {
+    printf("\033[0;31m"); // Setar a cor do output pra vermelho
+    printf("\nErro ao abrir o arquivo!\n");
+    printf("Erro: %d\n", errno);
+    printf("Erro: %s\n", strerror(errno));
+    printf("\033[0m"); // Resetar a cor do output
+}
+
+void print_vermelho(char string[]) {
+    printf("\033[0;31m"); // Setar a cor do output pra vermelho
+    printf("\n%s\n", string);
+    printf("\033[0m"); // Resetar a cor do output
+}
+
+void print_verde(char string[]){
+    printf("\033[0;32m"); // Setar a cor do output pra verde
+    printf("%s", string);
+    printf("\033[0m"); // Resetar a cor do output
+}
+
+bool diretorio_existe(char diretorio[]) {
+    DIR* dir = opendir(diretorio);
+
+    if (dir) {
+        closedir(dir);
+        return true;
+    } else if (ENOENT == errno) {
+        return false;
+    } else {
+        return false;
+    }
+}
+
+
+bool tabela_existe(char diretorio[], char nomeTabela[]) {
+
+    FILE* listTabelas = fopen("tabelas/listTabelas.pwn", "r");
+
+    if (listTabelas == NULL) {
+        erro_ao_abrir_arquivo();
+    }
+
+
+}
+
+void escrever_tabela(Coluna colunas[], int qtdColunas, char nomeArquivo[]) {
+
+    //Mapear titulos
+    char listTipos[5][20] = {"CHAR", "INT", "FLOAT", "DOUBLE", "STRING"};
+    
+    // Nome do diretorio tabelas
+    char nomeDiretorio[200] = "tabelas/";
+
+    // Se o diretorio não existe, criar
+    if (diretorio_existe(nomeDiretorio) == false) {
+        mkdir("tabelas", 0777);
+    }
+
+    // Variaveis de arquivo e lista de tabelas existentes
+    FILE *arquivo, *listTabela;
+    
+    // Adicionar a tabela na lista de tabelas
+    listTabela = fopen("tabelas/listTabelas.pwn", "a"); // Abrir o arquivo
+    fprintf(listTabela, "%i %s\n", qtdColunas, nomeArquivo); // Escrever no arquivo
+    fclose(listTabela); // Fechar o arquivo
+
+    // Criar nome do arquivo da tabela
+    strcat(nomeArquivo, ".pwn"); // Adicionar a extensão .pwn
+    strcat(nomeDiretorio, nomeArquivo); // Adicionar nome do arquivo ao nome do diretorio
+
+    // Abrir arquivo da tabela
+    printf("nomeDiretorio: %s\n", nomeDiretorio);
+    arquivo = fopen(nomeDiretorio, "w");
+
+
+    if (arquivo != NULL) {
+        printf("\033[0;32m"); // Setar a cor do output pra verde
+        printf("\nArquivo criado com sucesso!\n\n");
+        printf("\033[0m"); // Resetar a cor do output
+    } else {
+        erro_ao_abrir_arquivo();
+    }
+
+    // Escrever colunas no arquivo
+    for(int i = 0; i < qtdColunas; i++) {
+        fprintf(arquivo, "%s.%s;", colunas[i].nome, listTipos[colunas[i].tipo]);
+    }
+
+    fclose(arquivo); //Fechar arquivo
+}
 
 Coluna* criar_colunas(Coluna *colunas, int qtdColunas) {
     for (int i = 1; i < qtdColunas; i++) {
-        printf("Digite o nome da coluna %d: ", i);
-        scanf("%s", colunas[i].nome);
 
-        printf("Qual será o tipo da coluna %d: %s\n", i, colunas[i].nome);
+        int validacao = 0;
+
+        while (validacao == 0) {
+
+            printf("Digite o nome da coluna %d: ", i);
+            scanf("%s", colunas[i].nome);
+
+        if (colunas[i].nome[0] == '\0') {
+
+            print_vermelho("Nome da coluna não pode ser vazio!");
+
+        } else if (colunas[i].nome[0] == ' ') {
+
+            print_vermelho("Nome da coluna não pode começar com espaço!");
+
+        }
+
+        for (int j = 0; j < i; j++) {
+            if (strcmp(colunas[j].nome, colunas[i].nome) == 0) {
+
+                print_vermelho("Uma coluna com esse nome já existe!");
+                break;
+
+            } else {
+
+                validacao = 1;
+        }
+        }
+        
+
+        
+
+        printf("\nQual será o tipo da coluna %d: %s\n", i, colunas[i].nome);
         printf("1 - CHAR\t2 - INT\n3 - FLOAT\t4 - DOUBLE\n5 - STRING\n");
 
         int opcao;
@@ -35,11 +159,12 @@ Coluna* criar_colunas(Coluna *colunas, int qtdColunas) {
 
     return colunas;
 }
+}
 
 void criar_tabela() {
     // Criar o nome da tabela
     char listTipos[5][20] = {"CHAR", "INT", "FLOAT", "DOUBLE", "STRING"};
-    printf("Digite o nome da tabela: ");
+    printf("\nDigite o nome da tabela: ");
 
     char nomeArquivo[20];
     scanf("%s", nomeArquivo);
@@ -69,7 +194,7 @@ void criar_tabela() {
     Coluna* colunasPtr = criar_colunas(colunas, qtdColunas);
 
     // Imprimir nomes e tipos das colunas
-    printf("Nomes e tipos das colunas:\n");
+    printf("\nNomes e tipos das colunas:\n");
     for (int i = 0; i < qtdColunas; i++) {
         if (colunasPtr[i].nome[0] == '\0') {
             break;
