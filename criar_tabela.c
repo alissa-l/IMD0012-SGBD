@@ -34,8 +34,6 @@ bool diretorio_existe(char diretorio[]) {
         return true;
     } else if (ENOENT == errno) {
         return false;
-    } else {
-        return false;
     }
 }
 
