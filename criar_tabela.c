@@ -42,37 +42,30 @@ void escrever_tabela(Coluna colunas[], int qtdColunas, char nomeArquivo[]) {
     fclose(arquivo); // Fechar arquivo
 }
 
-bool coluna_existe (Coluna colunas[], char nomeColuna[], int qtdColunas) {
+bool coluna_existe(Coluna colunas[], char nomeColuna[], int qtdColunas) {
     char nome_colunas[qtdColunas][20];
 
     for (int i = 0; i < qtdColunas; i++) {
-
-        if (colunas[i].nome[0] == NULL) {
+        if (colunas[i].nome[0] == '\0') {
             break;
         } else {
             strcpy(nome_colunas[i], colunas[i].nome);
         }
-
     }
 
     for (int j = 0; j < qtdColunas; j++) {
-        printf("nome_colunas[%d]: %s\n", j, nome_colunas[j]);
+        if (strcmp(nomeColuna, nome_colunas[j]) == 0) {
+            return true;
+        }
     }
 
-        // printf("colunas[%d].nome: %s\n ||| %s", i, colunas[i].nome, nomeColuna);
-        // if (strcmp(nomeColuna, colunas[i].nome) == 0) {
-        //     return true;
-        // }
     return false;
 }
 
 Coluna *criar_colunas(Coluna *colunas, int qtdColunas) {
-    for (int i = 0; i < qtdColunas; i++) {
+    for (int i = 1; i < qtdColunas; i++) {
 
         int validacao = 0;
-
-        print_vermelho("START\n\n");
-
 
 
         while (validacao == 0) {
@@ -80,11 +73,13 @@ Coluna *criar_colunas(Coluna *colunas, int qtdColunas) {
             bool repetido = false;
 
 
-            printf("Digite o nome da coluna %d: ", i+1);
+            printf("Digite o nome da coluna %d: ", i);
             char nomeColuna[20];
 
             scanf("%s", nomeColuna);
 
+            repetido = coluna_existe(colunas, nomeColuna, qtdColunas);
+            
             if (nomeColuna[0] == '\0') {
 
                 print_vermelho("Nome da coluna não pode ser vazio!");
@@ -92,7 +87,7 @@ Coluna *criar_colunas(Coluna *colunas, int qtdColunas) {
             } else if (nomeColuna[0] == ' ') {
 
                 print_vermelho("Nome da coluna não pode começar com espaço!");
-            } else if(coluna_existe(colunas, nomeColuna, qtdColunas) == true) {
+            } else if(repetido == true) {
 
                 print_vermelho("Uma coluna com esse nome já existe!");
                 repetido = true;
@@ -104,10 +99,9 @@ Coluna *criar_colunas(Coluna *colunas, int qtdColunas) {
             
         }
 
-        print_vermelho("\n\nEND");
 
-        printf("\nQual será o tipo da coluna %d: %s\n", i, colunas[i].nome);
-            printf("1 - CHAR\t2 - INT\n3 - FLOAT\t4 - DOUBLE\n5 - STRING\n");
+         printf("\nQual será o tipo da coluna %d: %s\n", i, colunas[i].nome);
+             printf("1 - CHAR\t2 - INT\n3 - FLOAT\t4 - DOUBLE\n5 - STRING\n");
 
             int opcao;
             scanf("%d", &opcao);
