@@ -50,3 +50,28 @@ void criar_lista() {
 
     fclose(listTabelas);
 }
+
+int ler_arquivo(Tabela *tabelas) {
+    int c = 0;
+    FILE *arquivo = fopen("tabelas/listTabelas.pwn", "r" );
+    if(arquivo == NULL) {
+        print_vermelho("Erro na abertura do arquivo\n");
+    } else {
+        while(feof(arquivo) == 0) {
+            int qtd = 0;
+            char nome[20];
+            fscanf(arquivo, "%i %s\n", &qtd, nome);
+            printf("%i - %s\n", qtd, nome);
+            nome[strlen(nome)] = '\0';
+            if(qtd > 0) {
+                tabelas = realloc(tabelas, sizeof(Tabela) * (c+1));
+                tabelas[c].qtdColunas = qtd;
+                strcpy(tabelas[c].nome, nome);
+                c++;
+            }
+        }
+     }
+    fclose(arquivo); 
+
+    return c;
+}

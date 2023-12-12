@@ -31,3 +31,8 @@
 #define STDBOOL_H
 #include <stdbool.h>
 #endif
+
+#ifndef STDLIB_H
+#define STDLIB_H
+#include <stdlib.h>
+#endif

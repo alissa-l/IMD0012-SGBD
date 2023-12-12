@@ -11,3 +11,9 @@ typedef struct coluna {
     enum Tipo tipo;
     char nomeTipo[20];
 } Coluna;
+
+typedef struct tabela {
+    char nome[20];
+    int qtdColunas;
+    Coluna *colunas;
+} Tabela;
