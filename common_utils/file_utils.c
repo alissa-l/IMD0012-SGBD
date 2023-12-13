@@ -51,8 +51,9 @@ void criar_lista() {
     fclose(listTabelas);
 }
 
-int ler_arquivo(Tabela *tabelas) {
-    int c = 0;
+Tabela* ler_arquivo_tabelas(int *qtdTabelas) {
+    int numeroTabelas = 0;
+    Tabela *tabelas = malloc(sizeof(Tabela) * 1);
     FILE *arquivo = fopen("tabelas/listTabelas.pwn", "r" );
     if(arquivo == NULL) {
         print_vermelho("Erro na abertura do arquivo\n");
@@ -61,17 +62,35 @@ int ler_arquivo(Tabela *tabelas) {
             int qtd = 0;
             char nome[20];
             fscanf(arquivo, "%i %s\n", &qtd, nome);
-            printf("%i - %s\n", qtd, nome);
             nome[strlen(nome)] = '\0';
             if(qtd > 0) {
-                tabelas = realloc(tabelas, sizeof(Tabela) * (c+1));
-                tabelas[c].qtdColunas = qtd;
-                strcpy(tabelas[c].nome, nome);
-                c++;
+                tabelas = realloc(tabelas, sizeof(Tabela) * (numeroTabelas+1));
+                tabelas[numeroTabelas].qtdColunas = qtd;
+                strcpy(tabelas[numeroTabelas].nome, nome);
+                numeroTabelas++;
             }
         }
-     }
+    }
+    printf("%i - %i\n", *qtdTabelas, numeroTabelas);
+    qtdTabelas = &numeroTabelas;
+    printf("%i - %i\n", *qtdTabelas, numeroTabelas);
     fclose(arquivo); 
+    return tabelas;
+}
 
-    return c;
+void listar_tabelas() {
+    Tabela *tabelas;
+    int qtd = 0;
+    tabelas = ler_arquivo_tabelas(&qtd);
+    printf("%i\n", qtd);
+    printf("Estas são as tabelas existentes:\n");
+    for(int i = 0; i < qtd; i++) {
+        printf("%i - Tabela: %s", i+1, tabelas[i].nome);
+        if(i % 2 == 1) { 
+            printf("\n"); 
+        } else { 
+            printf("\t\t"); 
+        }
+    }
+    printf("\n");
 }

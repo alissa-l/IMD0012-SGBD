@@ -6,6 +6,9 @@
 
 #include "common_utils/globals.h"
 
+#include "criar_tabela.h"
+#include "criar_registro.h"
+
 // Usadas aqui
 #include <stddef.h>
 

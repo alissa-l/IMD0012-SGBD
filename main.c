@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include "criar_tabela.h"
-#include "criar_registro.h"
+#include "common_utils/dependecies.h"
 
 int main() {
     int opcao = 0;
@@ -18,7 +16,7 @@ int main() {
                 criar_tabela(); 
                 break;
             case 2:
-                //listar_tabelas();
+                listar_tabelas();
                 break;
             case 3:
                 criar_registro();
