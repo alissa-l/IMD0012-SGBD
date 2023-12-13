@@ -2,5 +2,6 @@
 bool tabela_existe(char nomeTabela[]);
 bool lista_existe();
 void criar_lista();
-Tabela* ler_arquivo_tabelas(int *qtdTabelas);
-void listar_tabelas();
+Tipo setar_tipo(char *tipo);
+Tabela mapear_colunas(Tabela tabela);
+ListaTabela listar_tabelas(bool imprimir);

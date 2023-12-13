@@ -51,8 +51,56 @@ void criar_lista() {
     fclose(listTabelas);
 }
 
-Tabela* ler_arquivo_tabelas(int *qtdTabelas) {
-    int numeroTabelas = 0;
+Tipo setar_tipo(char *tipo) {
+    Tipo tipo_enum;
+    if(strcmp(tipo, "CHAR") == 0) {
+        tipo_enum = CHAR;
+    } else if(strcmp(tipo, "INT") == 0) {
+        tipo_enum = INT;
+    } else if(strcmp(tipo, "FLOAT") == 0) {
+        tipo_enum = FLOAT;
+    } else if(strcmp(tipo, "DOUBLE") == 0) {
+        tipo_enum = DOUBLE;
+    } else if(strcmp(tipo, "STRING") == 0) {
+        tipo_enum = STRING;
+    }
+    return tipo_enum;
+}
+
+
+Tabela mapear_colunas(Tabela tabela) {
+    char nomeDiretorio[200] = "tabelas/";
+    int c = 0;
+    char* pedaco;
+    strcat(nomeDiretorio, tabela.nome);
+    strcat(nomeDiretorio, ".pwn");
+    FILE *arquivo = fopen(nomeDiretorio, "r" );
+    char line[1000];
+    if(arquivo == NULL) {
+        print_vermelho("Erro na abertura do arquivo\n");
+    } else {   
+        fscanf(arquivo, "%s", line);
+    }
+    tabela.colunas = malloc(sizeof(Coluna) * tabela.qtdColunas);
+    pedaco = strtok(line, ".");
+    while(pedaco != NULL){
+        char nome[20], tipo[20];
+        strcpy(nome, pedaco);
+        pedaco = strtok(NULL, ";");
+        strcpy(tipo, pedaco);
+        pedaco = strtok(NULL, ".");
+        strcpy(tabela.colunas[c].nome, nome);
+        strcpy(tabela.colunas[c].nomeTipo, tipo);
+        tabela.colunas[c].tipo = setar_tipo(tipo);
+        c++;
+    }
+    fclose(arquivo);
+    return tabela;
+}
+
+ListaTabela listar_tabelas(bool imprimir) {
+    ListaTabela listaTabelas;
+    int qtdTabelas = 0;
     Tabela *tabelas = malloc(sizeof(Tabela) * 1);
     FILE *arquivo = fopen("tabelas/listTabelas.pwn", "r" );
     if(arquivo == NULL) {
@@ -64,33 +112,37 @@ Tabela* ler_arquivo_tabelas(int *qtdTabelas) {
             fscanf(arquivo, "%i %s\n", &qtd, nome);
             nome[strlen(nome)] = '\0';
             if(qtd > 0) {
-                tabelas = realloc(tabelas, sizeof(Tabela) * (numeroTabelas+1));
-                tabelas[numeroTabelas].qtdColunas = qtd;
-                strcpy(tabelas[numeroTabelas].nome, nome);
-                numeroTabelas++;
+                tabelas = realloc(tabelas, sizeof(Tabela) * (qtdTabelas+1));
+                tabelas[qtdTabelas].qtdColunas = qtd;
+                strcpy(tabelas[qtdTabelas].nome, nome);
+                qtdTabelas++;
             }
         }
     }
-    printf("%i - %i\n", *qtdTabelas, numeroTabelas);
-    qtdTabelas = &numeroTabelas;
-    printf("%i - %i\n", *qtdTabelas, numeroTabelas);
-    fclose(arquivo); 
-    return tabelas;
-}
 
-void listar_tabelas() {
-    Tabela *tabelas;
-    int qtd = 0;
-    tabelas = ler_arquivo_tabelas(&qtd);
-    printf("%i\n", qtd);
-    printf("Estas são as tabelas existentes:\n");
-    for(int i = 0; i < qtd; i++) {
-        printf("%i - Tabela: %s", i+1, tabelas[i].nome);
-        if(i % 2 == 1) { 
-            printf("\n"); 
-        } else { 
-            printf("\t\t"); 
-        }
+    fclose(arquivo); 
+    listaTabelas.qtdTabelas = qtdTabelas;
+    listaTabelas.tabelas = malloc(sizeof(Tabela) * qtdTabelas);
+    for(int i = 0; i < qtdTabelas; i++) {
+        Tabela tab = mapear_colunas(tabelas[i]);
+        listaTabelas.tabelas[i] = tab;
     }
-    printf("\n");
+    
+    free(tabelas);
+
+    if(imprimir == true) {
+        printf("Estas são as tabelas existentes:\n");
+        for(int i = 0; i < listaTabelas.qtdTabelas; i++) {
+            printf("%i - Tabela: %s", i+1, listaTabelas.tabelas[i].nome);
+            if(i % 2 == 1) { 
+                printf("\n"); 
+            } else { 
+                printf("\t\t"); 
+            }
+        }
+        printf("\n\n");
+    }
+
+    return listaTabelas;
+    
 }

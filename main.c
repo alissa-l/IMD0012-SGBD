@@ -16,7 +16,7 @@ int main() {
                 criar_tabela(); 
                 break;
             case 2:
-                listar_tabelas();
+                listar_tabelas(true);
                 break;
             case 3:
                 criar_registro();
