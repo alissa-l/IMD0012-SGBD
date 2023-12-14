@@ -5,3 +5,5 @@ void criar_lista();
 Tipo setar_tipo(char *tipo);
 Tabela mapear_colunas(Tabela tabela);
 ListaTabela listar_tabelas(bool imprimir);
+void escrever_dado(char *nome, char* dados);
+int get_ultimo_registro(char *nomeTabela);

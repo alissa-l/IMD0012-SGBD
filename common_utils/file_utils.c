@@ -146,3 +146,36 @@ ListaTabela listar_tabelas(bool imprimir) {
     return listaTabelas;
     
 }
+
+void escrever_dado(char *nome, char* dados) {
+    char nomeDiretorio[200] = "tabelas/";
+    strcat(nomeDiretorio, nome);
+    strcat(nomeDiretorio, ".pwn");
+    FILE *arquivo = fopen(nomeDiretorio, "a");
+    if(arquivo == NULL) {
+        print_vermelho("Erro na abertura do arquivo: ");
+        printf("%s\n", nomeDiretorio);
+    } else {
+        fprintf(arquivo, "%s\n", dados);
+    }
+    fclose(arquivo);
+}
+
+int get_ultimo_registro(char *nomeTabela) {
+    int qtd = -1;
+    char nomeDiretorio[200] = "tabelas/";
+    strcat(nomeDiretorio, nomeTabela);
+    strcat(nomeDiretorio, ".pwn");
+    FILE *arquivo = fopen(nomeDiretorio, "r" );
+    if(arquivo == NULL) {
+        print_vermelho("Erro na abertura do arquivo\n");
+    } else {
+        while(feof(arquivo) == 0) {
+            char line[100];
+            fscanf(arquivo, "%s", line);
+            qtd++;
+        }
+    }
+    qtd--;
+    return qtd;
+}
