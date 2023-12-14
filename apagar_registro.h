@@ -1,0 +1,1 @@
+void apagar_registro();
