@@ -31,7 +31,7 @@ int main() {
                 //apagar_registro();
                 break;
             case 7:
-                //apagar_tabela();
+                apagar_tabela();
                 break;
             case 8:
                 break;
