@@ -13,8 +13,7 @@ void escrever_tabela(Coluna colunas[], int qtdColunas, char nomeArquivo[]) {
 
     // Adicionar a tabela na lista de tabelas
     listTabela = fopen("tabelas/listTabelas.pwn", "a"); // Abrir o arquivo
-    fprintf(listTabela, "%i %s\n", qtdColunas,
-            nomeArquivo); // Escrever no arquivo
+    fprintf(listTabela, "%i %s\n", qtdColunas, nomeArquivo); // Escrever no arquivo
     fclose(listTabela);   // Fechar o arquivo
 
     // Criar nome do arquivo da tabela
@@ -38,6 +37,7 @@ void escrever_tabela(Coluna colunas[], int qtdColunas, char nomeArquivo[]) {
     for (int i = 0; i < qtdColunas; i++) {
         fprintf(arquivo, "%s.%s;", colunas[i].nome, listTipos[colunas[i].tipo]);
     }
+    fprintf(arquivo, "\n");
 
     fclose(arquivo); // Fechar arquivo
 }
