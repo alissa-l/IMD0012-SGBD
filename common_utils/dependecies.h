@@ -6,6 +6,9 @@
 
 #include "common_utils/globals.h"
 
+#include "criar_tabela.h"
+#include "criar_registro.h"
+
 // Usadas aqui
 #include <stddef.h>
 
@@ -30,4 +33,9 @@
 #ifndef STDBOOL_H
 #define STDBOOL_H
 #include <stdbool.h>
+#endif
+
+#ifndef STDLIB_H
+#define STDLIB_H
+#include <stdlib.h>
 #endif
