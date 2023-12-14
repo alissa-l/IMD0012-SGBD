@@ -1,24 +1,5 @@
 #include "common_utils/dependecies.h"
 
-int get_ultimo_registro(char *nome) {
-    int qtd = -1;
-    char nomeDiretorio[200] = "tabelas/";
-    strcat(nomeDiretorio, nome);
-    strcat(nomeDiretorio, ".pwn");
-    FILE *arquivo = fopen(nomeDiretorio, "r" );
-    if(arquivo == NULL) {
-        print_vermelho("Erro na abertura do arquivo\n");
-    } else {
-        while(feof(arquivo) == 0) {
-            char line[100];
-            fscanf(arquivo, "%s", line);
-            qtd++;
-        }
-    }
-    qtd--;
-    return qtd;
-}
-
 void criar_registro() {
     int novoRegistro = 1;
     while(novoRegistro == 1) {
@@ -40,7 +21,7 @@ void criar_registro() {
         int id = get_ultimo_registro(tab.nome);
         char line[1000];
         char id_str[100];
-        itoa(id, id_str, 10);
+        sprintf(id_str,"%d",id);
         strcpy(line, id_str);
         strcat(line, ";");
         for(int i = 1; i < tab.qtdColunas; i++) {
