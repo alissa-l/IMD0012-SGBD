@@ -80,6 +80,7 @@ Tabela mapear_colunas(Tabela tabela) {
         print_vermelho("Erro na abertura do arquivo\n");
     } else {   
         fscanf(arquivo, "%s", line);
+        fclose(arquivo);
     }
     tabela.colunas = malloc(sizeof(Coluna) * tabela.qtdColunas);
     pedaco = strtok(line, ".");
@@ -94,7 +95,6 @@ Tabela mapear_colunas(Tabela tabela) {
         tabela.colunas[c].tipo = setar_tipo(tipo);
         c++;
     }
-    fclose(arquivo);
     return tabela;
 }
 
@@ -104,7 +104,7 @@ ListaTabela listar_tabelas(bool imprimir) {
     Tabela *tabelas = malloc(sizeof(Tabela) * 1);
     FILE *arquivo = fopen("tabelas/listTabelas.pwn", "r" );
     if(arquivo == NULL) {
-        print_vermelho("Erro na abertura do arquivo\n");
+        print_vermelho("Não existe tabelas cadastradas!\n");
     } else {
         while(feof(arquivo) == 0) {
             int qtd = 0;
@@ -118,19 +118,18 @@ ListaTabela listar_tabelas(bool imprimir) {
                 qtdTabelas++;
             }
         }
-    }
-
-    fclose(arquivo); 
-    listaTabelas.qtdTabelas = qtdTabelas;
-    listaTabelas.tabelas = malloc(sizeof(Tabela) * qtdTabelas);
-    for(int i = 0; i < qtdTabelas; i++) {
-        Tabela tab = mapear_colunas(tabelas[i]);
-        listaTabelas.tabelas[i] = tab;
+        fclose(arquivo); 
+        listaTabelas.qtdTabelas = qtdTabelas;
+        listaTabelas.tabelas = malloc(sizeof(Tabela) * qtdTabelas);
+        for(int i = 0; i < qtdTabelas; i++) {
+            Tabela tab = mapear_colunas(tabelas[i]);
+            listaTabelas.tabelas[i] = tab;
+        }
+        free(tabelas);
     }
     
-    free(tabelas);
 
-    if(imprimir == true) {
+    if(imprimir == true && listaTabelas.qtdTabelas > 0) {
         printf("Estas são as tabelas existentes:\n");
         for(int i = 0; i < listaTabelas.qtdTabelas; i++) {
             printf("%i - Tabela: %s", i+1, listaTabelas.tabelas[i].nome);
@@ -142,9 +141,7 @@ ListaTabela listar_tabelas(bool imprimir) {
         }
         printf("\n\n");
     }
-
     return listaTabelas;
-    
 }
 
 void escrever_dado(char *nome, char* dados) {
@@ -157,8 +154,8 @@ void escrever_dado(char *nome, char* dados) {
         printf("%s\n", nomeDiretorio);
     } else {
         fprintf(arquivo, "%s\n", dados);
+        fclose(arquivo);
     }
-    fclose(arquivo);
 }
 
 int get_ultimo_registro(char *nomeTabela) {
@@ -175,6 +172,7 @@ int get_ultimo_registro(char *nomeTabela) {
             fscanf(arquivo, "%s", line);
             qtd++;
         }
+        fclose(arquivo);
     }
     qtd--;
     return qtd;

@@ -7,10 +7,23 @@ void apagar_tabela() {
     printf("\n\n");
 
     ListaTabela listaTabelas = listar_tabelas(true);
+    int ind = -1;
+    while(ind < 0) {
+        char nome[20];
+        printf("Qual tabela deseja apagar? Informe o nome da tabela:\n");
+        scanf("%s", nome);
 
-    printf("Qual tabela deseja apagar? (Digite o índice):\n");
-    int index;
-    scanf("%d", &index);
+        for(int i = 0; i < listaTabelas.qtdTabelas; i++) {
+            if(strcmp(listaTabelas.tabelas[i].nome, nome) == 0) {
+                ind = i;
+                break;
+            }
+        }
+
+        if(ind < 0) {
+            print_vermelho("Por favor, digite um nome de tabela válido!");
+        }
+    }
 
     FILE *listaOriginal, *listaNova;
 
@@ -19,32 +32,29 @@ void apagar_tabela() {
     listaOriginal = fopen(LIST_TABELAS_ADDR, "r");
     listaNova = fopen("tabelas/temp.pwn", "w");
 
-    ch = getc(listaOriginal);
-    while (ch != EOF) {
-
-        if (ch == '\n') {
-            temp++;
-        }
-
-        if (temp != index - 1) {
-            putc(ch, listaNova);
-        }
-
+    if(listaOriginal == NULL) {
+        print_vermelho("Erro na abertura do arquivo\n");
+    } else {
         ch = getc(listaOriginal);
-
-
+        while (ch != EOF) {
+            if (ch == '\n') {
+                temp++;
+            }
+            if (temp != ind) {
+                putc(ch, listaNova);
+            }
+            ch = getc(listaOriginal);
+        }
+        fclose(listaOriginal);
+        fclose(listaNova);
     }
 
-    fclose(listaNova);
-    fclose(listaOriginal);
-    
     remove(LIST_TABELAS_ADDR);
     rename("tabelas/temp.pwn", LIST_TABELAS_ADDR);
 
-    Tabela tabela = listaTabelas.tabelas[index - 1];
+    Tabela tabela = listaTabelas.tabelas[ind];
     char nomeTabela[MAX];
     strcpy(nomeTabela, tabela.nome);
-
 
     char nomeDiretorio[MAX] = TABELA_DIR;
 
@@ -52,6 +62,5 @@ void apagar_tabela() {
     strcat(nomeDiretorio, ".pwn");
 
     remove(nomeDiretorio);
-
     print_verde("\n\nTabela apagada com sucesso!\n\n");
 }

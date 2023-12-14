@@ -22,7 +22,7 @@ int main() {
                 criar_registro();
                 break;
             case 4:
-                //listar_dados();
+                listar_dados();
                 break;
             case 5:
                 //pesquisar_registro();
