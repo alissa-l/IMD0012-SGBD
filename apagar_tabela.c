@@ -8,7 +8,7 @@ void apagar_tabela() {
 
     ListaTabela listaTabelas = listar_tabelas(true);
 
-    printf("Qual tabela deseja apagar? (Digite o índice)");
+    printf("Qual tabela deseja apagar? (Digite o índice):\n");
     int index;
     scanf("%d", &index);
 
@@ -19,22 +19,39 @@ void apagar_tabela() {
     listaOriginal = fopen(LIST_TABELAS_ADDR, "r");
     listaNova = fopen("tabelas/temp.pwn", "w");
 
+    ch = getc(listaOriginal);
     while (ch != EOF) {
-        ch = getc(listaOriginal);
 
         if (ch == '\n') {
             temp++;
         }
 
         if (temp != index - 1) {
-            printf("%c", ch);
             putc(ch, listaNova);
         }
+
+        ch = getc(listaOriginal);
+
+
     }
 
     fclose(listaNova);
     fclose(listaOriginal);
     
-    
+    remove(LIST_TABELAS_ADDR);
+    rename("tabelas/temp.pwn", LIST_TABELAS_ADDR);
 
+    Tabela tabela = listaTabelas.tabelas[index - 1];
+    char nomeTabela[MAX];
+    strcpy(nomeTabela, tabela.nome);
+
+
+    char nomeDiretorio[MAX] = TABELA_DIR;
+
+    strcat(nomeDiretorio, nomeTabela);
+    strcat(nomeDiretorio, ".pwn");
+
+    remove(nomeDiretorio);
+
+    print_verde("\n\nTabela apagada com sucesso!\n\n");
 }
