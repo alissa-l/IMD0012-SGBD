@@ -12,10 +12,21 @@ typedef struct coluna {
     char nomeTipo[20];
 } Coluna;
 
+typedef struct valorColuna {
+    char coluna[20];
+    char valor[200];
+} ValorColuna;
+
+typedef struct linha {
+   ValorColuna *valoresColuna;
+} Linha;
+
 typedef struct tabela {
     char nome[20];
     int qtdColunas;
+    int qtdLinhas;
     Coluna *colunas;
+    Linha *linhas;
 } Tabela;
 
 
