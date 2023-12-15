@@ -14,12 +14,15 @@ void apagar_registro_tabela(Tabela tab, int id) {
     if(arquivoOriginal == NULL) {
         print_vermelho("Erro na abertura do arquivo\n");
     } else {
+        char id_str[100];
+        sprintf(id_str,"%d",id);
         while(feof(arquivoOriginal) == 0) {
-            char line[1000];
+            char line[1000], dado[1000];
             fscanf(arquivoOriginal, "%s\n", line);
+            strcpy(dado, line);
             char *pedaco = strtok(line, ";");
-            if(strcmp(pedaco, id) != 0) {
-                fprintf(arquivoOriginal, "%s\n", line);
+            if(strcmp(pedaco, id_str) != 0) {
+                fprintf(arquivoNovo, "%s\n", dado);
             }
         }
         fclose(arquivoOriginal);
@@ -27,7 +30,7 @@ void apagar_registro_tabela(Tabela tab, int id) {
     }
     remove(nomeDiretorio);
     rename("tabelas/temp.pwn", nomeDiretorio);
-    print_verde("Registro apagado com sucesso!");
+    print_verde("Registro apagado com sucesso!\n\n");
 }
 
 void apagar_registro() {
@@ -54,7 +57,7 @@ void apagar_registro() {
     if(qtdRegistros > 0) {
         listar_dados_tabela(tab);
         int id = -1;
-        while(id < 0 && id >= qtdRegistros) {
+        while(id < 0 || id >= qtdRegistros) {
             printf("Informe a chave primária (id) do registro que você deseja apagar:\n");
             scanf("%i", &id);
             if(id < 0 && id >= qtdRegistros) {
