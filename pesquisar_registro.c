@@ -21,12 +21,12 @@ void pesquisar_registro() {
             }
         }
         printf("\n");
-        Tabela tab = listaTabelas.tabelas[indTbl];
+        Tabela tabela = listaTabelas.tabelas[indTbl];
         while(indCln < 0) {
             char nome[20];
             printf("Em qual coluna você deseja pesquisar?\n");
-            for(int i = 0; i < tab.qtdColunas; i++) {
-                printf("Coluna %i: %s (Tipo: %s)", i+1, tab.colunas[i].nome, tab.colunas[i].nomeTipo);
+            for(int i = 0; i < tabela.qtdColunas; i++) {
+                printf("Coluna %i: %s (Tipo: %s)", i+1, tabela.colunas[i].nome, tabela.colunas[i].nomeTipo);
                 if(i % 2 == 0) {
                     printf("\t\t");
                 } else {
@@ -35,8 +35,8 @@ void pesquisar_registro() {
             }
             printf("\n\n");
             scanf("%s", nome);
-            for(int i = 0; i < tab.qtdColunas; i++) {
-                if(strcmp(tab.colunas[i].nome, nome) == 0) {
+            for(int i = 0; i < tabela.qtdColunas; i++) {
+                if(strcmp(tabela.colunas[i].nome, nome) == 0) {
                     indCln = i;
                     break;
                 }
@@ -46,7 +46,7 @@ void pesquisar_registro() {
                 print_vermelho("Por favor, digite um nome de coluna válido!");
             }
         }
-        Coluna col = tab.colunas[indCln];
+        Coluna col = tabela.colunas[indCln];
         printf("\n");
         
         char valorPesquisa[1000];
@@ -68,40 +68,34 @@ void pesquisar_registro() {
         scanf("%d", &opcao);
 
         printf("\n\n");
-        for(int i = 0; i < tab.qtdColunas; i++) {
-            if (i == tab.qtdColunas - 1) {
-                printf("%s\n", tab.colunas[i].nome);
+        for(int i = 0; i < tabela.qtdColunas; i++) {
+            if (i == tabela.qtdColunas - 1) {
+                printf("%s\n", tabela.colunas[i].nome);
             } else {
-                printf("%s\t ", tab.colunas[i].nome);
+                printf("%s\t\t", tabela.colunas[i].nome);
             }   
         }
 
         switch (opcao)
         {
         case 1:
-            for(int i = 0; i < tab.qtdLinhas; i++) {
-                if(strcmp(col.nomeTipo, "CHAR") == 0) {
-                    if(tab.linhas[i].valoresColuna[indCln].valor[0] > valorPesquisa[0]) {
-                        
-                    }
-                } else if(strcmp(col.nomeTipo, "INT") == 0) {
-                    if(atoi(tab.linhas[i].valoresColuna[indCln].valor) > atoi(valorPesquisa)) {
-                        printf("%s\n", tab.linhas[i].valoresColuna[indCln].valor);
-                    }
-                } else if(strcmp(col.nomeTipo, "FLOAT") == 0) {
-                    if(atof(tab.linhas[i].valoresColuna[indCln].valor) > atof(valorPesquisa)) {
-
-                    }
-                } else if(strcmp(col.nomeTipo, "DOUBLE") == 0) {
-                    if(atof(tab.linhas[i].valoresColuna[indCln].valor) > atof(valorPesquisa)) {
-
-                    }
-                } else if(strcmp(col.nomeTipo, "STRING") == 0) {
-                    if(strcmp(tab.linhas[i].valoresColuna[indCln].valor, valorPesquisa) > 0) {
-
-                    }
-                }
-            }
+            pesquisa_maior_que(valorPesquisa, tabela, col, indCln);
+            break;
+        case 2:
+            pesquisa_maior_ou_igual_a(valorPesquisa, tabela, col, indCln);
+            break;
+        case 3:
+            pesquisa_menor_que(valorPesquisa, tabela, col, indCln);
+            break;
+        case 4:
+            pesquisa_menor_ou_igual_a(valorPesquisa, tabela, col, indCln);
+            break;
+        case 5:
+            pesquisa_igual_a(valorPesquisa, tabela, col, indCln);
+            break;
+        case 6:
+            pesquisa_proxima(valorPesquisa, tabela, col, indCln);
+        default:
             break;
         }
 
