@@ -1,0 +1,1 @@
+void pesquisar_registro();

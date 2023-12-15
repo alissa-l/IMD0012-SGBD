@@ -11,6 +11,7 @@
 #include "apagar_tabela.h"
 #include "apagar_registro.h"
 #include "listar_dados.h"
+#include "pesquisar_registro.h"
 
 // Usadas aqui
 #include <stddef.h>
