@@ -95,6 +95,60 @@ Tabela mapear_colunas(Tabela tabela) {
         tabela.colunas[c].tipo = setar_tipo(tipo);
         c++;
     }
+
+    return tabela;
+}
+
+Tabela mapear_linhas(Tabela tabela) {
+    int c = 0;
+    char* pedaco;
+    Linha *linhas = malloc(sizeof(Linha) * (c+1));
+    char nomeDiretorio[200] = "tabelas/";
+    strcat(nomeDiretorio, tabela.nome);
+    strcat(nomeDiretorio, ".pwn");
+    FILE *arquivo = fopen(nomeDiretorio, "r" );
+    char line[1000];
+    if(arquivo == NULL) {
+        print_vermelho("Erro na abertura do arquivo\n");
+    } else {   
+        int indLin = 0;
+        while(feof(arquivo) == 0) {
+            c++;
+            char line[1000], cpyLine[1000];
+            fscanf(arquivo, "%s\n", line);
+            if(c > 1) {
+                int indCol = 0;
+                ValorColuna *valoresColuna = malloc(sizeof(ValorColuna) * tabela.qtdColunas);
+                ValorColuna valorColuna;
+                strcpy(valorColuna.coluna, tabela.colunas[indCol].nome);
+                pedaco = strtok(line, ";");
+                strcpy(valorColuna.valor, pedaco);
+                valoresColuna[indCol] = valorColuna;
+                for(int i = 1; i < tabela.qtdColunas; i++) {
+                    ValorColuna valorColuna;
+                    strcpy(valorColuna.coluna, tabela.colunas[i].nome);
+                    pedaco = strtok(NULL, ";");
+                    strcpy(valorColuna.valor, pedaco);
+                    indCol++;
+                    valoresColuna[indCol] = valorColuna;
+                }
+                linhas[indLin].valoresColuna = malloc(sizeof(ValorColuna) * (indCol+1));
+                for(int j = 0; j <= indCol; j++) {
+                    linhas[indLin].valoresColuna[j] = valoresColuna[j];
+                }
+                indLin++;
+                linhas = realloc(linhas, sizeof(Linha) * (indLin+1));
+            }
+        }
+
+        tabela.qtdLinhas = indLin;
+        tabela.linhas = malloc(sizeof(Linha) * indLin);
+        for(int j = 0; j < indLin; j++) {
+            tabela.linhas[j] = linhas[j];
+        }
+
+        fclose(arquivo);
+    }
     return tabela;
 }
 
@@ -123,8 +177,12 @@ ListaTabela listar_tabelas(bool imprimir) {
         listaTabelas.tabelas = malloc(sizeof(Tabela) * qtdTabelas);
         for(int i = 0; i < qtdTabelas; i++) {
             Tabela tab = mapear_colunas(tabelas[i]);
+            tab = mapear_linhas(tab);
             listaTabelas.tabelas[i] = tab;
         }
+
+
+        
         free(tabelas);
     }
     
