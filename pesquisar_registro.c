@@ -63,6 +63,48 @@ void pesquisar_registro() {
             printf("\n");
         }
 
+        int opcao;
+
+        scanf("%d", &opcao);
+
+        printf("\n\n");
+        for(int i = 0; i < tab.qtdColunas; i++) {
+            if (i == tab.qtdColunas - 1) {
+                printf("%s\n", tab.colunas[i].nome);
+            } else {
+                printf("%s\t ", tab.colunas[i].nome);
+            }   
+        }
+
+        switch (opcao)
+        {
+        case 1:
+            for(int i = 0; i < tab.qtdLinhas; i++) {
+                if(strcmp(col.nomeTipo, "CHAR") == 0) {
+                    if(tab.linhas[i].valoresColuna[indCln].valor[0] > valorPesquisa[0]) {
+                        
+                    }
+                } else if(strcmp(col.nomeTipo, "INT") == 0) {
+                    if(atoi(tab.linhas[i].valoresColuna[indCln].valor) > atoi(valorPesquisa)) {
+                        printf("%s\n", tab.linhas[i].valoresColuna[indCln].valor);
+                    }
+                } else if(strcmp(col.nomeTipo, "FLOAT") == 0) {
+                    if(atof(tab.linhas[i].valoresColuna[indCln].valor) > atof(valorPesquisa)) {
+
+                    }
+                } else if(strcmp(col.nomeTipo, "DOUBLE") == 0) {
+                    if(atof(tab.linhas[i].valoresColuna[indCln].valor) > atof(valorPesquisa)) {
+
+                    }
+                } else if(strcmp(col.nomeTipo, "STRING") == 0) {
+                    if(strcmp(tab.linhas[i].valoresColuna[indCln].valor, valorPesquisa) > 0) {
+
+                    }
+                }
+            }
+            break;
+        }
+
         printf("\n\n\n\n");
     }
 
