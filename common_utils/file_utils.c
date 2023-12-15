@@ -154,6 +154,7 @@ Tabela mapear_linhas(Tabela tabela) {
 
 ListaTabela listar_tabelas(bool imprimir) {
     ListaTabela listaTabelas;
+    listaTabelas.qtdTabelas = 0;
     int qtdTabelas = 0;
     Tabela *tabelas = malloc(sizeof(Tabela) * 1);
     FILE *arquivo = fopen("tabelas/listTabelas.pwn", "r" );
