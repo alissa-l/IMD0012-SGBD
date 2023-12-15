@@ -9,6 +9,7 @@
 #include "criar_tabela.h"
 #include "criar_registro.h"
 #include "apagar_tabela.h"
+#include "apagar_registro.h"
 #include "listar_dados.h"
 
 // Usadas aqui
